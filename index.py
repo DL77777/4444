@@ -13,6 +13,8 @@ def index():
     homepage += "<a href=/welcome?nick=許皓翔>傳送使用者暱稱</a><br>"
     homepage += "<a href=/about>許皓翔簡介網頁</a><br>"
     homepage += "<a href=/account>帳號密碼表單</a><br>"
+   homepage += "<br><a href=/spider>spider</a><br>"
+
     return homepage
 
 
@@ -46,6 +48,20 @@ def account():
     else:
         return render_template("account.html")
 
+@app.route("/spider")
+def spider():
+    url = "https://www1.pu.edu.tw/~tcyang/course.html"
+    Data = requests.get(url)
+    Data.encoding="utf-8"
+    #print(Data.text)
+
+    sp = BeautifulSoup(Data.text, "html.parser")
+    result=sp.select(".team-box")
+    info=""
+    for x in result:
+        info += "<a href=" + x.find("a").get("href") + ">" + x.text + "</a><br>"
+        info += x.find("a").get("href")+"<br><br>"
+    return info
 
 #if __name__ == "__main__":
     #app.run()
